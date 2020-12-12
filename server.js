@@ -18,7 +18,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 //connect to db
 mongoose.connect(
-    process.env.DB_SECRET,
+    "mongodb+srv://osm:b0ujuF14yCjLolQk@anonconfess.yth2c.mongodb.net/anonconfess?retryWrites=true&w=majority",
     {
         useNewUrlParser: true,
         useUnifiedTopology: true,
@@ -34,7 +34,7 @@ mongoose.connect(
 server.use(bodyParser.urlencoded({extended: true}))
 server.use(bodyParser.json())
 server.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "http://www.anonconfess.com/");
+    res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     res.header('Access-Control-Allow-Methods', '*')
     next();
@@ -58,7 +58,13 @@ server.use('/confessions', confessionsRoutes)
 
 
 server.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, "public", "404.html"))
+    const ex = req.url.split('.')[req.url.split('.').length - 1]
+    const allowedExtensions = ['js', 'css', 'png', 'jpg']
+    if (allowedExtensions.includes(ex)) {
+        res.sendFile(path.resolve(__dirname, "public", req.url.slice(1)))
+    } else {
+        res.sendFile(path.resolve(__dirname, "public", "404.html"))
+    }
 })
 const PORT = process.env.PORT || 4000
 server.listen(4000, () => {
