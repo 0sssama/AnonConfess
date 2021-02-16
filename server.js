@@ -67,7 +67,7 @@ server.get('*', (req, res) => {
     }
 })
 const PORT = process.env.PORT || 4000
-server.listen(4000, () => {
+server.listen(PORT, () => {
     Log('success', `Server started successfully, listening on port ${PORT}`)
     Log('detect', 'Connecting to DB, please wait...')
 })
